@@ -19,8 +19,8 @@ package body p_apple is
   procedure replace is
   -- {} => {Place a new apple}
   begin
-      x := Integer(generator.random(rand)) mod (Console.getTerminalWidth / 2 - 2) * 2 + 2;
-      y := Integer(generator.random(rand)) mod (Console.getTerminalHeight - 1) + 1;
+      x := Integer(generator.random(rand)) mod (Console.getTerminalWidth / 2) * 2 + 2;
+      y := Integer(generator.random(rand)) mod (Console.getTerminalHeight) + 1;
   end replace;
 
   function pickUp(posX,posY: positive) return boolean is
