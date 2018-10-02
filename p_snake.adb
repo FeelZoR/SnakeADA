@@ -43,12 +43,11 @@ package body p_snake is
   procedure changeDirection(dir: character) is
   -- {} => {Changes the direction with the character passed}
   begin
-    if nextDirection /= NONE then return; end if;
     case dir is
-      when 'z' => if moveDirection not in SOUTH then nextDirection := NORTH; end if;
-      when 'q' => if moveDirection not in EAST then nextDirection := WEST; end if;
-      when 's' => if moveDirection not in NORTH then nextDirection := SOUTH; end if;
-      when 'd' => if moveDirection not in WEST then nextDirection := EAST; end if;
+      when 'z' => push(nextDirection, NORTH);
+      when 'q' => push(nextDirection, WEST);
+      when 's' => push(nextDirection, SOUTH);
+      when 'd' => push(nextDirection, EAST);
       when others => return;
     end case;
   end changeDirection;
@@ -97,14 +96,31 @@ package body p_snake is
   procedure update is
   -- {} => {Updates the snake and draws it}
   begin
-    if nextDirection /= NONE then
-      moveDirection := nextDirection;
-      nextDirection := NONE;
-    end if;
-
+    updateDirection;
     move;
   end update;
 
+  procedure updateDirection is
+  -- {} => {Update the direction of the snake}
+    currentDirection: Direction;
+  begin
+    currentDirection := moveDirection;
+    while not isEmpty(nextDirection) loop
+      moveDirection := pop(nextDirection);
+      if not areDirectionsOpposed(moveDirection, currentDirection) then return; end if;
+    end loop;
+
+    moveDirection := currentDirection;
+  end updateDirection;
+
+  function areDirectionsOpposed(dir1, dir2: Direction) return boolean is
+  -- {} => {result=true if directions are opposed}
+  begin
+    return (dir1 = NORTH and dir2 = SOUTH) or
+      (dir1 = SOUTH and dir2 = NORTH) or
+      (dir1 = EAST and dir2 = WEST) or
+      (dir1 = WEST and dir2 = EAST);
+  end areDirectionsOpposed;
 
   procedure draw is
   -- {} => {Starts drawing the snake}
