@@ -36,7 +36,7 @@ package body p_snake is
     Last := newPart;        -- Replaces the last element by the newly created one
     size := size + 1;
     if size > DEFAULT_SIZE then
-      speed := speed - 0.001;
+      speed := speed - 0.001 / float(size);
     end if;
   end append;
 
